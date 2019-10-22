@@ -1,0 +1,52 @@
+---
+apiVersion: "extensions/v1beta1"
+kind: "Deployment"
+metadata:
+  name: "APP_NAME-deployment"
+  namespace: "default"
+  labels:
+    app: "APP_NAME"
+spec:
+  replicas: COUNT
+  selector:
+    matchLabels:
+      app: "APP_NAME"
+  template:
+    metadata:
+      labels:
+        app: "APP_NAME"
+    spec:
+      volumes:
+        - name: "cloudsql-sa-creds"
+          secret:
+            secretName: "cloudsql-sa-creds"
+      containers:
+        - image: "gcr.io/GCP_PROJECT/APP_NAME:DOCKER_TAG"
+          name: "APP_NAME"
+          env:
+            - name: "GOOGLE_APPLICATION_CREDENTIALS"
+              value: "/secrets/cloudsql/SQL_SA_CREDENTIALS"
+            - name: "DBUSER"
+              valueFrom:
+                secretKeyRef:
+                  key: "user"
+                  name: "cloudsql-connection-creds"
+            - name: "DBPASS"
+              valueFrom:
+                secretKeyRef:
+                  key: "password"
+                  name: "cloudsql-connection-creds"
+            - name: "CLOUDSQL"
+              valueFrom:
+                configMapKeyRef:
+                  name: "sqlconnection"
+                  key: "sqlconnection"
+          ports:
+            - containerPort: 9000
+              name: "APP_NAME"
+          volumeMounts:
+            - name: "cloudsql-sa-creds"
+              mountPath: /secrets/cloudsql
+              readOnly: true
+      imagePullSecrets:
+        - name: "GCR_CREDS"
