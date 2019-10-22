@@ -57,10 +57,12 @@ function gcp_compute_address_delete() {
 function gcp_images_delete() {
     NAME=$1
     if [[ $(gcloud container images list --format="value(NAME)" --filter="NAME:$NAME") == "$NAME" ]]; then
-        gcloud container images delete $NAME --force-delete-tags --quiet;
+        for item in $(gcloud container images list-tags "$NAME" --sort-by=TIMESTAMP --format='get(digest)'); do
+            gcloud container images delete --force-delete-tags "$NAME@$item" --quiet;
+        done
     else
         echo "Nothing to do. Image $NAME is not exists"
-    fi       
+    fi
 }
 
 function gke_cluster_get_credentials() {
