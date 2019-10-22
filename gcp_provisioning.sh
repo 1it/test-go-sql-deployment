@@ -4,6 +4,7 @@ dir="$(dirname "$0")"
 
 source "${dir}/gcp_functions.sh"
 
+# Provisioning resorces functions
 function gcp_create() {
     source "${dir}/gcp_defaults.sh"
 
@@ -47,6 +48,7 @@ function gcp_create() {
     kubectl_create_deployment "$GKE_DEPLOYMENT_FILE";
 }
 
+# Build docker image and push to registry
 function gcp_build() {
     source "${dir}/gcp_defaults.sh"
     if [ "$1" != "" ]; then export DOCKER_TAG=$1; fi
@@ -55,6 +57,7 @@ function gcp_build() {
     gcr_docker_push "$APP_NAME" "$DOCKER_TAG";
 }
 
+# Deploy and scale
 function gcp_deploy() {
     source "${dir}/gcp_defaults.sh"
     if [ "$1" != "" ]; then export DOCKER_TAG=$1; fi
@@ -64,6 +67,7 @@ function gcp_deploy() {
     kubectl_deploy "$GKE_API_FILE";
 }
 
+# Cleanup all resources
 function gcp_destroy() {
     source "${dir}/gcp_defaults.sh"
 
@@ -89,5 +93,5 @@ function gcp_destroy() {
     gcp_images_delete "gcr.io/$GCP_PROJECT/$APP_NAME";
 
     # Cleanup temporary files
-    rm "$GKE_DEPLOYMENT_FILE" "$GKE_API_FILE" "$SQL_SA_CREDENTIALS" "$GKE_SA_CREDENTIALS" "$dir/.cloudsql.name" "$dir/.ext.ipv4"
+    rm -f "$GKE_DEPLOYMENT_FILE" "$GKE_API_FILE" "$SQL_SA_CREDENTIALS" "$GKE_SA_CREDENTIALS" "$dir/.cloudsql.name" "$dir/.ext.ipv4"
 }
