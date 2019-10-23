@@ -6,8 +6,8 @@ import (
 )
 
 // Http vars
+// Could be changed via environment variable like: httpPath, ok := os.LookupEnv("HTTPURI")
 var httpPath = "/hello/"
-//var HealthCheckPathHttp = "/health/"
 var HealthCheckPath = "/health/"
 var contentType = "Content-Type"
 var appJson = "application/json"
@@ -19,6 +19,7 @@ var httpErrorWrongInput = "Wrong input. Please, avoid numeric characters"
 var httpErrorWrongInputDate = "Invalid dateOfBirth value (YYYY-MM-DD)"
 var httpErrorWrongDate = "Invalid dateOfBirth value (Not today)"
 
+// Initialzing the HTTP service config
 func initConfig() string {
     httpHost, ok := os.LookupEnv("HTTPHOST")
     if !ok {

@@ -11,6 +11,7 @@ WORKDIR /src/app/
 
 RUN go build -a -tags netgo -ldflags '-w -extldflags "-static"' -o /go/bin/testApi
 
+# Originally here was FROM scratch, but Cloud CQL proxy requires some minimal OS environment and ca-certificates.
 FROM alpine:latest
 
 RUN apk add --no-cache ca-certificates

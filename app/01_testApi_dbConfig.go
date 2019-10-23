@@ -11,8 +11,8 @@ import (
 
 // DB vars
 var db *sql.DB
+// Initialzing the database connection parameters on app startup
 var configMap = dbConfig()
-// map[string]string
 
 // DB struct
 type Users struct {
@@ -20,6 +20,7 @@ type Users struct {
     Birthday string
 }
 
+// Generates db connection string
 func dbConfig() map[string]string {
     configMap := make(map[string]string)
 
@@ -49,6 +50,7 @@ func dbConfig() map[string]string {
         log.Println("DBNAME environment variable isn't set, using default")
         dbname = "hello"
     }
+    // Swith to cloudsql connection if CLOUDSQL is set
     cloudsql, ok := os.LookupEnv("CLOUDSQL")
     if ok {
         log.Println("Using CLOUDSQL connection type")
@@ -60,6 +62,7 @@ func dbConfig() map[string]string {
     return configMap
 }
 
+// Database connection function
 func connectDb() (*sql.DB, error) {
     db, err := sql.Open(configMap["connectionType"], configMap["connectionParams"])
     if err != nil {
@@ -70,6 +73,7 @@ func connectDb() (*sql.DB, error) {
     return db, err
 }
 
+// Initialzing the database table and trigger
 func initDb() {
     db, err := connectDb()
     if err != nil {

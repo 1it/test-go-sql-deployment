@@ -9,6 +9,7 @@ const (
     layoutISO = "2006-01-02"
 )
 
+// Converting given date to format 'layoutISO'
 func date(s string) (time.Time, error) {
     date, err := time.Parse(layoutISO, s)
     return date, err
@@ -38,7 +39,7 @@ func daysToBirthday(d string) int {
         result = -result
     }
 
-    // Should be some hours
+    // Should be some hours like 12 but returns day value as integer
     if result == 0 {
         result = 1
     }
