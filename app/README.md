@@ -75,7 +75,7 @@ Response: 200 OK
 Returns message with the user's number of days to birthday. Only if the user exists in the database, otherwise the service will return:  
 `User {username}, is not in database`
 
-**Request: GET /health/**
+**Request: GET /health/**  
 Response: 200 OK  
 Returns the current service health information. If service is up and can connect to the database it will return:  
 ```json
